@@ -4,7 +4,13 @@ project(rosban_utils)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED)
+find_package(catkin REQUIRED
+    cmake_modules
+)
+
+find_package(TinyXML REQUIRED)
+
+
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
@@ -100,6 +106,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES rosban_utils
+  DEPENDS TinyXML
 )
 
 ###########
@@ -108,12 +115,20 @@ catkin_package(
 
 # Specify additional locations of header files
 # Your package locations should be listed before other locations
-include_directories(include)
+include_directories(
+  include
+  ${catkin_INCLUDE_DIRS} 
+  ${TinyXML_INCLUDE_DIRS}
+)
 
 # Declare a C++ library
 add_library(rosban_utils
   src/rosban_utils/time_stamp.cpp
+  src/rosban_utils/io_tools.cpp
+  src/rosban_utils/serializable.cpp
 )
+
+target_link_libraries(rosban_utils ${catkin_LIBRARIES} ${TinyXML_LIBRARIES})
 
 #############
 ## Install ##
