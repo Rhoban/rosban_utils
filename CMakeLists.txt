@@ -126,6 +126,8 @@ add_library(rosban_utils
   src/rosban_utils/time_stamp.cpp
   src/rosban_utils/io_tools.cpp
   src/rosban_utils/serializable.cpp
+  src/rosban_utils/string_tools.cpp
+  src/rosban_utils/xml_tools.cpp
 )
 
 target_link_libraries(rosban_utils ${catkin_LIBRARIES} ${TinyXML_LIBRARIES})

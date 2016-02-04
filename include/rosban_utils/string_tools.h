@@ -7,10 +7,8 @@ namespace rosban_utils
 
 class ConversionError : public std::runtime_error
 {
-  ConversionError(const std::string & msg)
-    : std::runtime_error("Conversion error" + msg)
-    {
-    }
+public:
+  ConversionError(const std::string & msg);
 };
 
 // Convert a string to the given type
@@ -22,41 +20,21 @@ T str2(const std::string &s)
 
 // Specializations
 template <>
-std::string str2<std::string>(const std::string &s)
-{
-  return s;
-}
+std::string str2<std::string>(const std::string &s);
 
 template <>
-int str2<int>(const std::string &s)
-{
-  return std::stoi(s);
-}
+int str2<int>(const std::string &s);
 
 template <>
-bool str2<bool>(const std::string &s)
-{
-  if (s == "true") return true;
-  if (s == "false") return false;
-  throw ("Cannot convert '" + s + "' to bool");
-}
+bool str2<bool>(const std::string &s);
 
 template <>
-char str2<char>(const std::string &s)
-{
-  return (char)str2<int>(s);
-}
+char str2<char>(const std::string &s);
 
 template <>
-double str2<double>(const std::string &s)
-{
-  return std::stod(s);
-}
+double str2<double>(const std::string &s);
 
 template <>
-float str2<float>(const std::string &s)
-{
-  return (float)str2<double>(s);
-}
+float str2<float>(const std::string &s);
 
 }

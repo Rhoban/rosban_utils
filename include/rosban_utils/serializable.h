@@ -5,22 +5,6 @@
 namespace rosban_utils
 {
 
-///
-
-#define XML_WRITE_SERIALIZABLE(result, truc) {                          \
-    result << "<" << # truc << ">" << truc.to_xml() << "</" << # truc << ">"; \
-  }
-
-#define XML_READ_SERIALIZABLE(node, truc)           \
-  {                                                 \
-    try{                                            \
-      TiXmlNode * child;                            \
-      if ((child = node->FirstChild(# truc)) != 0 ) \
-        truc.from_xml(child);                       \
-    }                                               \
-    catch (...){}                                   \
-    }
-
 class Serializable
 {
 public:
@@ -40,20 +24,24 @@ public:
   void save_file(const std::string &filename);
 
   /// deserializes from an xml stream
-  virtual void from_xml(const std::string &xml_stream);
+  void from_xml(const std::string &xml_stream);
 
   /// deserializes from an xml node
-  virtual void from_xml(TiXmlNode *node) {
-    (void) node;//Suppress unused warning
-    throw std::runtime_error("from_xml not implemented");
-  };
+  virtual void from_xml(TiXmlNode *node) = 0;
 
   /// serializes to an xml stream excluding class name
-  virtual std::string to_xml() const { throw std::runtime_error("to_xml not implemented");};
+  std::string to_xml() const;
 
+  // Append xml to the given stream
+  virtual void to_xml(std::ostream &out) const = 0;
 
   /// serializes to an xml stream including class name
   std::string to_xml_stream() const;
+
+  // Write in the given stream the serializable object inside a node with the given key
+  void write(const std::string & key, std::ostream & out) const;
+  // Update the object from the given node
+  void read(const std::string & key, TiXmlNode *node);
 
   /*! pretty print */
   void pretty_print() const;

@@ -35,10 +35,21 @@ void Serializable::load_file(const std::string &path)
   }
 }
 
+std::string Serializable::to_xml() const
+{
+  std::ostringstream oss;
+  to_xml(oss);
+  return oss.str();
+}
+
 //serializes to an xml stream including class name
 std::string Serializable::to_xml_stream() const
 {
-  return "<"+ class_name() + ">" + to_xml() + "</"+ class_name() + ">";
+  std::ostringstream oss;
+  oss << "<" << class_name() << ">";
+  to_xml(oss);
+  oss << "</" << class_name() << ">";
+  return oss.str();
 }
 
 void Serializable::save_file()
@@ -77,7 +88,20 @@ void Serializable::from_xml(const std::string &xml_string)
     throw std::runtime_error("Failed to extract data from xml stream:\n\t"
                              + std::string(exc.what()));
 	}
+}
 
+void Serializable::write(const std::string & key, std::ostream & out) const
+{
+  out << "<" << key << ">" << to_xml() << "</" << key << ">";
+}
+
+void Serializable::read(const std::string & key, TiXmlNode *node)
+{
+  if(!node) throw XMLParsingError("Null node when trying to read an object");
+  TiXmlNode* child = node->FirstChild(key);
+  if (!child) throw XMLParsingError("No node named '" + key + "' in node '"
+                                    + node->Value() + "'");
+  from_xml(child);
 }
 
 void Serializable::pretty_print() const
