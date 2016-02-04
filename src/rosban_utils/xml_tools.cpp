@@ -27,7 +27,7 @@ template <>
 void write<double>(const std::string &key, const double &value, std::ostream &out)
 {
   out.precision(10);
-  write_generic<std::string>(key, value ? "true" : "false", out);
+  write_generic<double>(key, value, out);
 }
 
 

@@ -41,7 +41,7 @@ public:
   // Write in the given stream the serializable object inside a node with the given key
   void write(const std::string & key, std::ostream & out) const;
   // Update the object from the given node
-  void read(const std::string & key, TiXmlNode *node);
+  void read(TiXmlNode *node, const std::string & key);
 
   /*! pretty print */
   void pretty_print() const;
