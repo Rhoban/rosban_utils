@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdexcept>
+#include <vector>
 
 namespace rosban_utils
 {
@@ -36,5 +37,10 @@ double str2<double>(const std::string &s);
 
 template <>
 float str2<float>(const std::string &s);
+
+/// Allow to choose the precision of the print (not available in std::to_string)
+std::string to_string(double val, int precision);
+
+std::vector<std::string> split_string(const std::string &s, char separator);
 
 }

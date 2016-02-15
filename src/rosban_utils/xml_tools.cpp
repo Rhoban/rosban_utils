@@ -26,10 +26,14 @@ void write<bool>(const std::string &key, const bool &value, std::ostream &out)
 template <>
 void write<double>(const std::string &key, const double &value, std::ostream &out)
 {
-  out.precision(10);
-  write_generic<double>(key, value, out);
+  write(key, value, out, 10);///10 is default precision
 }
 
+void write(const std::string &key, const double &value, std::ostream &out, int precision)
+{
+  std::string val_str = to_string(value, precision);
+  write_generic<std::string>(key, val_str, out);
+}
 
 std::string get_element(TiXmlNode * node, const std::string & key)
 {

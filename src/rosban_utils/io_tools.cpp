@@ -3,6 +3,8 @@
 #include <fstream>
 #include <stdexcept>
 
+#include <iostream>
+
 namespace rosban_utils
 {
 std::string file2string(const std::string &path)

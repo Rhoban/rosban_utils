@@ -40,6 +40,8 @@ void write<bool>(const std::string &key, const bool &value, std::ostream &out);
 template <>
 void write<double>(const std::string &key, const double &value, std::ostream &out);
 
+void write(const std::string &key, const double &value, std::ostream &out, int precision);
+
 
 template<typename T>
 void write_vector(const std::string &key, const std::vector<T> &values, std::ostream &out)
