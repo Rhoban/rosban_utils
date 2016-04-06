@@ -123,6 +123,7 @@ include_directories(
 
 # Declare a C++ library
 add_library(rosban_utils
+  src/rosban_utils/benchmark.cpp
   src/rosban_utils/time_stamp.cpp
   src/rosban_utils/io_tools.cpp
   src/rosban_utils/serializable.cpp
