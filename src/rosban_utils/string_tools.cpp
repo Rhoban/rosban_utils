@@ -29,7 +29,7 @@ bool str2<bool>(const std::string &s)
 {
   if (s == "true") return true;
   if (s == "false") return false;
-  throw ("Cannot convert '" + s + "' to bool");
+  throw std::runtime_error("Cannot convert '" + s + "' to bool");
 }
 
 template <>

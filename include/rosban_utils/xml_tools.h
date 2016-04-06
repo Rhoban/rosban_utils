@@ -62,6 +62,22 @@ T read(TiXmlNode * node, const std::string &key)
   return str2<T>(get_element(node, key));
 }
 
+/// Fill 'value' reference with the one at given key in the provided node
+/// If key is not found, no error is thrown and 'value' reference is not modified
+/// If key is found but content cannot be parsed, an error is still raised
+template<typename T>
+void try_read(TiXmlNode *node, const std::string &key, T &value)
+{
+  try
+  {
+    value = read<T>(node, key);
+  }
+  catch (const XMLParsingError &err)
+  {
+    return;
+  }
+}
+
 template <typename T>
 std::vector<T> read_vector(TiXmlNode * node, const std::string &key)
 {
