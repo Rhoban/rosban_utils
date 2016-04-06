@@ -47,6 +47,10 @@ void Benchmark::open(const std::string &benchmark_name)
 {
   // If child is not existing yet:
   std::shared_ptr<Benchmark> child_benchmark(new Benchmark(current, benchmark_name));
+  if (current)
+  {
+    current->children.push_back(child_benchmark);
+  }
   current = child_benchmark;
 }
 
