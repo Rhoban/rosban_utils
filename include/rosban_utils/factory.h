@@ -46,7 +46,7 @@ public:
 
   /// path: path to xml_file
   /// node_name: name of the root node in the file
-  T * build_from_xml_file(const std::string &path, const std::string &node_name) const
+  T * buildFromXmlFile(const std::string &path, const std::string &node_name) const
     {
       TiXmlDocument * doc = xml_tools::file_to_doc(path);
       if(!doc) throw std::runtime_error("Failed to load file " + path);
