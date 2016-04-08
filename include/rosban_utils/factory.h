@@ -44,6 +44,30 @@ public:
       return b(node);
     }
 
+  /// path: path to xml_file
+  /// node_name: name of the root node in the file
+  T * build_from_xml_file(const std::string &path, const std::string &node_name) const
+    {
+      TiXmlDocument * doc = xml_tools::file_to_doc(path);
+      if(!doc) throw std::runtime_error("Failed to load file " + path);
+
+      TiXmlNode * node = doc->FirstChild(node_name.c_str());
+      if(!node) throw std::runtime_error("Failed to find node with tag "
+                                         + node_name + " in xml file " + path);
+
+      try
+      {
+        T * obj = build(node);
+        delete doc;
+        return obj;
+      }
+      catch (const std::runtime_error &exc)
+      {
+        delete doc;
+        throw exc;
+      }
+    }
+
   /// Send an error if a builder for the given class_name is already registered
   void registerBuilder(const std::string &class_name, Builder builder)
     {
