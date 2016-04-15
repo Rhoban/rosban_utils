@@ -104,6 +104,17 @@ void Serializable::read(TiXmlNode *node, const std::string & key)
   from_xml(child);
 }
 
+void Serializable::tryRead(TiXmlNode *node, const std::string &key)
+{
+  if(!node) throw XMLParsingError("Null node when trying to read an object");
+
+  TiXmlNode* child = node->FirstChild(key);
+  if (!child) return;
+
+  from_xml(child);
+}
+    
+
 void Serializable::pretty_print() const
 {
   TiXmlDocument * doc = xml_tools::string_to_doc(to_xml_stream());
