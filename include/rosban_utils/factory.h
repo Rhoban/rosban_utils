@@ -37,11 +37,26 @@ public:
       return b(NULL);
     }
 
+  /// When building from a node, the expected format of the xml is the following:
+  /// <class_name>...</class_name>
   T * build(TiXmlNode *node) const
     {
-      std::string class_name = xml_tools::read<std::string>(node, "class_name");
+      // Checking node validity
+      if (node == NULL)
+      {
+        throw std::runtime_error("Factory::build: Trying to build an object from a NULL node");
+      }
+      // Checking if the node has a child and which is its class
+      TiXmlNode * content_node = node->FirstChild();
+      if (content_node == NULL)
+      {
+        std::ostringstream oss;
+        oss << "Factory::build: expecting a child to node '" << node->Value() << "'";
+        throw std::runtime_error(oss.str());
+      }
+      std::string class_name = content_node->Value();
       Builder b = getBuilder(class_name);
-      return b(node);
+      return b(content_node);
     }
 
   /// path: path to xml_file
