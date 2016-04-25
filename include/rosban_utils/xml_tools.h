@@ -98,6 +98,18 @@ std::vector<T> read_vector(TiXmlNode * node, const std::string &key)
   return result;
 }
 
+/// Do not throw an error if no node with the given key is found
+/// Still throws an error on internal parsing issue or if node is NULL
+template <typename T>
+void try_read_vector(TiXmlNode * node, const std::string &key, std::vector<T> & res)
+{
+  if(!node) throw XMLParsingError("Null node when trying to get a vector");
+  TiXmlNode* values = node->FirstChild(key);
+  if (!values) return;
+
+  res = read_vector<T>(node, key);
+}
+
 ///@param stream
 ///@return a non null node on the second sibling of the stream
 ///and throw an exception if no such node
