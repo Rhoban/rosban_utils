@@ -19,9 +19,9 @@ int writeInt(std::ostream & out, int val);
 /// Return the number of bytes written
 int writeDouble(std::ostream & out, double val);
 /// Return the number of bytes written
-int writeIntArray(std::ostream & out, int * values, int nb_values);
+int writeIntArray(std::ostream & out, const int * values, int nb_values);
 /// Return the number of bytes written
-int writeDoubleArray(std::ostream & out, double * values, int nb_values);
+int writeDoubleArray(std::ostream & out, const double * values, int nb_values);
 
 /// Return the number of bytes read
 int readInt(std::istream & in, int & val);

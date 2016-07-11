@@ -36,17 +36,17 @@ int writeDouble(std::ostream & out, double val)
   return sizeof(double);
 }
 
-int writeIntArray(std::ostream & out, int * values, int nb_values)
+int writeIntArray(std::ostream & out, const int * values, int nb_values)
 {
   int nb_bytes = sizeof(int) * nb_values;
-  out.write(reinterpret_cast<char*>(values), nb_bytes);
+  out.write(reinterpret_cast<const char*>(values), nb_bytes);
   return nb_bytes;
 }
 
-int writeDoubleArray(std::ostream & out, double * values, int nb_values)
+int writeDoubleArray(std::ostream & out, const double * values, int nb_values)
 {
   int nb_bytes = sizeof(double) * nb_values;
-  out.write(reinterpret_cast<char*>(values), nb_bytes);
+  out.write(reinterpret_cast<const char*>(values), nb_bytes);
   return nb_bytes;
 }
 
