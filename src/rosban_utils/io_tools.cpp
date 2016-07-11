@@ -50,4 +50,30 @@ int writeDoubleArray(std::ostream & out, double * values, int nb_values)
   return nb_bytes;
 }
 
+int readInt(std::istream & in, int & val)
+{
+  in.read(reinterpret_cast<char*>(&val), sizeof(int));
+  return sizeof(int);
+}
+
+int readDouble(std::istream & in, double & val)
+{
+  in.read(reinterpret_cast<char*>(&val), sizeof(double));
+  return sizeof(double);
+}
+
+int readIntArray(std::istream & in, int * values, int nb_values)
+{
+  int bytes_to_read = sizeof(int) * nb_values;
+  in.read(reinterpret_cast<char*>(values), bytes_to_read);
+  return bytes_to_read;
+}
+
+int readDoubleArray(std::istream & in, double * values, int nb_values)
+{
+  int bytes_to_read = sizeof(double) * nb_values;
+  in.read(reinterpret_cast<char*>(values), bytes_to_read);
+  return bytes_to_read;
+}
+
 }

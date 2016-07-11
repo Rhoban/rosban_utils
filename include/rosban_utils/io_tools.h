@@ -23,4 +23,13 @@ int writeIntArray(std::ostream & out, int * values, int nb_values);
 /// Return the number of bytes written
 int writeDoubleArray(std::ostream & out, double * values, int nb_values);
 
+/// Return the number of bytes read
+int readInt(std::istream & in, int & val);
+/// Return the number of bytes read
+int readDouble(std::istream & in, double & val);
+/// Return the number of bytes read
+int readIntArray(std::istream & in, int * values, int nb_values);
+/// Return the number of bytes read
+int readDoubleArray(std::istream & in, double * values, int nb_values);
+
 }
