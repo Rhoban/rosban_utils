@@ -7,6 +7,7 @@
 
 namespace rosban_utils
 {
+
 std::string file2string(const std::string &path)
 {
   std::ifstream in(path, std::ios::in | std::ios::binary);
@@ -22,4 +23,31 @@ std::string file2string(const std::string &path)
   }
   throw std::runtime_error("Failed to open file '" + path + "'");
 }
+
+int writeInt(std::ostream & out, int val)
+{
+  out.write(reinterpret_cast<char*>(&val), sizeof(int));
+  return sizeof(int);
+}
+
+int writeDouble(std::ostream & out, double val)
+{
+  out.write(reinterpret_cast<char*>(&val), sizeof(double));
+  return sizeof(double);
+}
+
+int writeIntArray(std::ostream & out, int * values, int nb_values)
+{
+  int nb_bytes = sizeof(int) * nb_values;
+  out.write(reinterpret_cast<char*>(values), nb_bytes);
+  return nb_bytes;
+}
+
+int writeDoubleArray(std::ostream & out, double * values, int nb_values)
+{
+  int nb_bytes = sizeof(double) * nb_values;
+  out.write(reinterpret_cast<char*>(values), nb_bytes);
+  return nb_bytes;
+}
+
 }
