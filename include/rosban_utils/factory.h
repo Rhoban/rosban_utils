@@ -3,6 +3,7 @@
 #include "rosban_utils/serializable.h"
 
 #include <functional>
+#include <memory>
 #include <string>
 #include <unordered_map>
 
@@ -10,10 +11,6 @@ namespace rosban_utils
 {
 
 // TODO:
-// - use unique_ptr instead of pointer
-// - Use two typedefs: RawBuilder(no args) and XMLBuilder and add overload registerBuilder
-//   - makeParsingBuilder(RawBuilder) <- call from_xml()
-//   - makeSimpleBuilder(RawBuilder) <- discard the node argument
 // - Add read options
 //   - std::unique_ptr read(node, name)
 //   - std::unique_ptr tryRead(node, name, std::unique_ptr &)
@@ -26,10 +23,11 @@ template <class T>
 class Factory
 {
 public:
-  /// Builder can use xml data
-  typedef std::function<T *(TiXmlNode *node)> Builder;
+  /// XMLBuilder can use xml data
+  typedef std::function<std::unique_ptr<T>()> Builder;
+  typedef std::function<std::unique_ptr<T>(TiXmlNode *node)> XMLBuilder;
 
-  Builder getBuilder(const std::string &class_name) const
+  XMLBuilder getBuilder(const std::string &class_name) const
     {
       try
       {
@@ -41,15 +39,15 @@ public:
       }
     }
 
-  T * build(const std::string &class_name) const
+  std::unique_ptr<T> build(const std::string &class_name) const
     {
-      Builder b = getBuilder(class_name);
+      XMLBuilder b = getBuilder(class_name);
       return b(NULL);
     }
 
   /// When building from a node, the expected format of the xml is the following:
   /// <class_name>...</class_name>
-  T * build(TiXmlNode *node) const
+  std::unique_ptr<T> build(TiXmlNode *node) const
     {
       // Checking node validity
       if (node == NULL)
@@ -65,13 +63,13 @@ public:
         throw std::runtime_error(oss.str());
       }
       std::string class_name = content_node->Value();
-      Builder b = getBuilder(class_name);
+      XMLBuilder b = getBuilder(class_name);
       return b(content_node);
     }
 
   /// path: path to xml_file
   /// node_name: name of the root node in the file
-  T * buildFromXmlFile(const std::string &path, const std::string &node_name) const
+  std::unique_ptr<T> buildFromXmlFile(const std::string &path, const std::string &node_name) const
     {
       TiXmlDocument * doc = xml_tools::file_to_doc(path);
       if(!doc) throw std::runtime_error("Failed to load file " + path);
@@ -82,7 +80,7 @@ public:
 
       try
       {
-        T * obj = build(node);
+        std::unique_ptr<T> obj = build(node);
         delete doc;
         return obj;
       }
@@ -93,8 +91,25 @@ public:
       }
     }
 
+  static XMLBuilder toXMLBuilder(Builder builder, bool parse_xml)
+    {
+      return [builder, parse_xml](TiXmlNode * node) -> std::unique_ptr<T>
+      {
+        std::unique_ptr<T> object(builder());
+        if (parse_xml) object->from_xml(node);
+        return std::move(object);
+      };
+    }
+
   /// Send an error if a builder for the given class_name is already registered
-  void registerBuilder(const std::string &class_name, Builder builder)
+  /// - Automatically transform the builder in XMLBuilder
+  void registerBuilder(const std::string &class_name, Builder builder, bool parse_xml = true)
+    {
+      registerBuilder(class_name, toXMLBuilder(builder, parse_xml));
+    }
+
+  /// Send an error if a builder for the given class_name is already registered
+  void registerBuilder(const std::string &class_name, XMLBuilder builder)
     {
       if (builders.count(class_name) != 0)
         throw std::runtime_error("Factory: registering a class named '" + class_name
@@ -104,7 +119,7 @@ public:
 
 private:
   /// Contains a mapping from class names to builders
-  std::unordered_map<std::string, Builder>  builders;
+  std::unordered_map<std::string, XMLBuilder>  builders;
 };
 
 }
