@@ -9,6 +9,16 @@
 namespace rosban_utils
 {
 
+// TODO:
+// - use unique_ptr instead of pointer
+// - Use two typedefs: RawBuilder(no args) and XMLBuilder and add overload registerBuilder
+//   - makeParsingBuilder(RawBuilder) <- call from_xml()
+//   - makeSimpleBuilder(RawBuilder) <- discard the node argument
+// - Add read options
+//   - std::unique_ptr read(node, name)
+//   - std::unique_ptr tryRead(node, name, std::unique_ptr &)
+// - Add write options eventually (issues with guarantees of const, maybe only for shared_ptr)
+
 /// This class implements a factory pattern. It can be used for producing
 /// various objects inheriting from class T. More specific initialization can be
 /// achieved by using data from a xml tree
