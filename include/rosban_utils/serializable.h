@@ -41,6 +41,10 @@ public:
   /// Write in the given stream the serializable object inside a node with the given key
   void write(const std::string & key, std::ostream & out) const;
 
+  /// In factoryWrite, the pattern is the following:
+  /// <key><class_name>...</class_name></key>
+  void factoryWrite(const std::string & key, std::ostream & out) const;
+
   /// Update the object from the given node
   void read(TiXmlNode *node, const std::string & key);
 

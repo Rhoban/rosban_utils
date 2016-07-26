@@ -95,6 +95,13 @@ void Serializable::write(const std::string & key, std::ostream & out) const
   out << "<" << key << ">" << to_xml() << "</" << key << ">";
 }
 
+void Serializable::factoryWrite(const std::string & key, std::ostream & out) const
+{
+  out << "<" << key << ">";
+  write(class_name(), out);
+  out << "</" << key << ">";
+}
+
 void Serializable::read(TiXmlNode *node, const std::string & key)
 {
   if(!node) throw XMLParsingError("Null node when trying to read an object");
