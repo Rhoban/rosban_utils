@@ -1,5 +1,7 @@
 #include "rosban_utils/multi_core.h"
 
+#include <thread>
+
 namespace rosban_utils
 {
 
@@ -27,6 +29,53 @@ MultiCore::Intervals MultiCore::buildIntervals(int nb_tasks, int nb_threads)
     start = end;
   }
   return result;
+}
+
+
+void MultiCore::runParallelTask(Task t,
+                                int nb_tasks,
+                                int nb_threads)
+{
+  MultiCore::Intervals intervals = buildIntervals(nb_tasks, nb_threads);
+  std::vector<std::thread> threads;
+  // Launch all threads
+  for (size_t thread_no = 0; thread_no < intervals.size(); thread_no++)
+  {
+    int start = intervals[thread_no].first;
+    int end = intervals[thread_no].second;
+    threads.push_back(std::thread([t, start, end](){t(start,end);}));
+  }
+  // Wait for all threads to finish
+  for (size_t thread_no = 0; thread_no < intervals.size(); thread_no++)
+  {
+    threads[thread_no].join();
+  }
+}
+
+void MultiCore::runParallelStochasticTask(StochasticTask st,
+                                          int nb_tasks,
+                                          std::vector<std::default_random_engine> * engines)
+{
+  if (engines == nullptr || engines->size() == 0) {
+    throw std::runtime_error("MultiCore::runParallelStochasticTask with no engines");
+  }
+  int nb_threads = engines->size();
+  MultiCore::Intervals intervals = buildIntervals(nb_tasks, nb_threads);
+  std::vector<std::thread> threads;
+  // Launch all threads
+  for (size_t thread_no = 0; thread_no < intervals.size(); thread_no++)
+  {
+    int start = intervals[thread_no].first;
+    int end = intervals[thread_no].second;
+    std::default_random_engine * thread_engine = &((*engines)[thread_no]);
+    threads.push_back(std::thread([st, start, end, thread_engine]()
+                                  {st(start, end, thread_engine);}));
+  }
+  // Wait for all threads to finish
+  for (size_t thread_no = 0; thread_no < intervals.size(); thread_no++)
+  {
+    threads[thread_no].join();
+  }
 }
 
 }
