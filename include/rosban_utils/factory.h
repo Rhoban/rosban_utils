@@ -91,6 +91,35 @@ public:
       }
     }
 
+  std::unique_ptr<T> read(TiXmlNode * node, const std::string & key)
+    {
+      if(!node) throw XMLParsingError("Null node when trying to read from a factory");
+      TiXmlNode * child = node->FirstChild(key);
+      if (!child) throw XMLParsingError("Could not find node with label '" + key + "' in node: '"
+                                        + node->Value() + "'");
+      return build(child);
+    }
+
+  /// Fill 'ptr' with a generated object with the given node as argument
+  /// If node is null or key is not found:
+  /// - no error is thrown and 'ptr' content is not modified
+  /// If key is found but content cannot be parsed:
+  /// - an error is still raised and the 'ptr' is not overwritten
+  /// If key is found and content is parsed properly:
+  /// - 'ptr' is overwritten (and thus, old value is deleted according to unique_ptr)
+  void tryRead(TiXmlNode * node, const std::string & key, std::unique_ptr<T> & ptr)
+    {
+      TiXmlNode * child;
+      try {
+        if(!node) throw XMLParsingError("");
+        child = node->FirstChild(key);
+        if (!child) throw XMLParsingError("");
+      }
+      // Abort reading if node was null or child was not found
+      catch (const XMLParsingError & err) { return; }
+      ptr = build(child);
+    }
+
   static XMLBuilder toXMLBuilder(Builder builder, bool parse_xml)
     {
       return [builder, parse_xml](TiXmlNode * node) -> std::unique_ptr<T>
