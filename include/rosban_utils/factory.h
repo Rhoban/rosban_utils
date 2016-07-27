@@ -3,6 +3,7 @@
 #include "rosban_utils/io_tools.h"
 #include "rosban_utils/serializable.h"
 
+#include <fstream>
 #include <functional>
 #include <memory>
 #include <string>
@@ -150,6 +151,20 @@ public:
       return bytes_read;
     }
 
+  /// Return the number of bytes read
+  int loadFromFile(const std::string & filename, std::unique_ptr<T> & ptr)
+    {
+      std::ifstream in(filename, std::ios::binary);
+      if (!in) {
+        std::ostringstream oss;
+        oss << "Failed to open '" << filename << "' for binary reading";
+        throw std::runtime_error(oss.str());
+      }
+      int bytes_read = read(in, ptr);
+      in.close();
+      return bytes_read;
+    }
+
   /// Fill 'ptr' with a generated object with the given node as argument
   /// If node is null or key is not found:
   /// - no error is thrown and 'ptr' content is not modified
@@ -175,7 +190,7 @@ public:
       return [builder, parse_xml](TiXmlNode * node) -> std::unique_ptr<T>
       {
         std::unique_ptr<T> object(builder());
-        if (parse_xml) object->from_xml(node);
+        if (node != nullptr && parse_xml) object->from_xml(node);
         return std::move(object);
       };
     }
