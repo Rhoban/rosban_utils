@@ -18,7 +18,7 @@ int StreamSerializable::write(std::ostream & out) const
   return bytes_written;
 }
 
-int StreamSerializable::save(const std::string & filename, bool write_class_id)
+int StreamSerializable::save(const std::string & filename, bool write_class_id) const
 {
   std::ofstream out(filename, std::ios::binary);
   if (!out) {

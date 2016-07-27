@@ -31,7 +31,7 @@ public:
 
   /// Save the object to the given file and return the number of bytes written
   /// - write_class_id is required if loader is not supposed to know the true type of the object
-  virtual int save(const std::string & filename, bool write_class_id = true);
+  virtual int save(const std::string & filename, bool write_class_id = true) const;
 };
 
 }
