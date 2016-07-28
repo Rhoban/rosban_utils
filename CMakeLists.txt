@@ -8,6 +8,9 @@ find_package(catkin REQUIRED
     cmake_modules
 )
 
+find_package(PkgConfig)
+pkg_search_module(Eigen3 REQUIRED eigen3>=3.2.3)
+
 find_package(TinyXML REQUIRED)
 
 
