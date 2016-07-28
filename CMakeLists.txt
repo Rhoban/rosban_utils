@@ -107,7 +107,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-  INCLUDE_DIRS include
+  INCLUDE_DIRS include ${EIGEN3_INCLUDE_DIR}
   LIBRARIES rosban_utils
   DEPENDS TinyXML
 )
@@ -120,6 +120,7 @@ catkin_package(
 # Your package locations should be listed before other locations
 include_directories(
   include
+  ${EIGEN3_INCLUDE_DIR}
   ${catkin_INCLUDE_DIRS} 
   ${TinyXML_INCLUDE_DIRS}
 )
