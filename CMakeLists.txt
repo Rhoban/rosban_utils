@@ -132,7 +132,7 @@ add_library(rosban_utils
   src/rosban_utils/xml_tools.cpp
 )
 
-target_link_libraries(rosban_utils ${catkin_LIBRARIES} ${TinyXML_LIBRARIES})
+target_link_libraries(rosban_utils ${catkin_LIBRARIES} ${TinyXML_LIBRARIES} pthread)
 
 #############
 ## Install ##
