@@ -35,4 +35,15 @@ int StreamSerializable::save(const std::string & filename, bool write_class_id) 
   return bytes_written;
 }
 
+void StreamSerializable::load(const std::string & path)
+{
+  std::ifstream in(path, std::ios::binary);
+  if (!in) {
+    std::ostringstream oss;
+    oss << "Failed to open '" << path << "' for binary writing";
+    throw std::runtime_error(oss.str());
+  }
+  read(in);
+}
+
 }

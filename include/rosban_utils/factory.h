@@ -145,7 +145,7 @@ public:
       int bytes_read = 0;
       int id;
       bytes_read += rosban_utils::read<int>(in, &id);
-      int builder_bytes_read;
+      int builder_bytes_read = 0;
       ptr = getStreamBuilder(id)(in, &builder_bytes_read);
       bytes_read += builder_bytes_read;
       return bytes_read;
