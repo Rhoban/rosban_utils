@@ -41,7 +41,10 @@ public:
       }
       catch (const std::out_of_range &exc)
       {
-        throw std::out_of_range("Factory: type '" + class_name + "' is not registered"); 
+        std::ostringstream oss;
+        oss << "Factory: type '" << class_name << "' is not registered" << std::endl;
+        listBuilders(oss);
+        throw std::out_of_range(oss.str()); 
       }
     }
 
@@ -234,6 +237,7 @@ public:
         std::ostringstream oss;
         oss << "Factory: registering a class with id '" << id
             << "' while it is already used";
+        listBuilders(oss);
         throw std::runtime_error(oss.str());
       }
       builders_by_id[id] = builder;
@@ -249,6 +253,23 @@ public:
         throw std::runtime_error(oss.str());
       }
       stream_builders_by_id[id] = builder;
+    }
+
+  /// List all the known builders to the stream
+  void listBuilders(std::ostream & out) const
+    {
+      out << "XML Builders: " << std::endl;
+      for (const auto & entry : xml_builders) {
+        out << "\t" << entry.first << std::endl;
+      }
+      out << "Default Builders: " << std::endl;
+      for (const auto & entry : builders_by_id) {
+        out << "\t" << entry.first << std::endl;
+      }
+      out << "Stream Builders: " << std::endl;
+      for (const auto & entry : stream_builders_by_id) {
+        out << "\t" << entry.first << std::endl;
+      }
     }
 
 private:
