@@ -2,6 +2,7 @@
 
 #include <stdexcept>
 #include <vector>
+#include <string>
 
 namespace rosban_utils
 {
@@ -16,7 +17,7 @@ public:
 template <typename T>
 T str2(const std::string &s)
 {
-  throw ConversionError("unspecified type");
+	throw ConversionError(std::string("unspecified type"));
 }
 
 // Specializations
