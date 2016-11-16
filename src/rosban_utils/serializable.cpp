@@ -33,6 +33,8 @@ void Serializable::load_file(const std::string &path)
     delete doc;
     throw exc;
   }
+
+  delete doc;
 }
 
 std::string Serializable::to_xml() const
