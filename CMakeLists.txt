@@ -8,7 +8,7 @@ find_package(catkin REQUIRED
     cmake_modules
 )
 
-find_package(Eigen3 REQUIRED)
+find_package(Eigen REQUIRED)
 
 find_package(TinyXML REQUIRED)
 
@@ -108,7 +108,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 catkin_package(
   INCLUDE_DIRS include ${EIGEN_INCLUDE_DIRS}
   LIBRARIES rosban_utils
-  DEPENDS TinyXML Eigen3
+  DEPENDS TinyXML Eigen
 )
 
 ###########
@@ -119,7 +119,7 @@ catkin_package(
 # Your package locations should be listed before other locations
 include_directories(
   include
-  ${EIGEN3_INCLUDE_DIR}
+  ${EIGEN_INCLUDE_DIR}
   ${catkin_INCLUDE_DIRS} 
   ${TinyXML_INCLUDE_DIRS}
 )
