@@ -108,7 +108,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 catkin_package(
   INCLUDE_DIRS include ${EIGEN_INCLUDE_DIRS}
   LIBRARIES rosban_utils
-  DEPENDS TinyXML
+  DEPENDS TinyXML Eigen
 )
 
 ###########
