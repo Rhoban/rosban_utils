@@ -142,6 +142,22 @@ public:
       return build(child);
     }
 
+  std::vector<std::unique_ptr<T>> readVector(TiXmlNode * node, const std::string & key)
+    {
+      // Treeating problem cases
+      if(!node) throw XMLParsingError("Factory::readVector: Null node when trying to get a vector");
+      TiXmlNode* values = node->FirstChild(key);
+      if (!values) throw XMLParsingError("Could not find node with label '" + key + "' in node: '"
+                                         + node->Value() + "'");
+      std::vector<std::unique_ptr<T>> result;
+      for (TiXmlNode * entry_node = values->FirstChild();
+           entry_node != NULL;
+           entry_node = entry_node->NextSibling()) {
+        result.push_back(build(entry_node));
+      }
+      return result;
+    }
+
   /// Return the number of bytes read
   int read(std::istream & in, std::unique_ptr<T> & ptr)
     {
