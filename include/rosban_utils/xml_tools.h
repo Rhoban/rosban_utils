@@ -79,6 +79,22 @@ void try_read(TiXmlNode *node, const std::string &key, T &value)
     return;
   }
 }
+template <typename T>
+std::vector<T> read_serializable_vector(TiXmlNode * node, const std::string &key)
+{
+  if(!node) throw XMLParsingError("Null node when trying to get a vector");
+  TiXmlNode* values = node->FirstChild(key);
+  if (!values) throw XMLParsingError("Could not find node with label '" + key + "' in node: '"
+                                     + node->Value() + "'");
+  std::vector<T> result;
+  for ( TiXmlNode* child = values->FirstChild(); child != NULL; child = child->NextSibling())
+  {
+    T new_element;
+    new_element.from_xml(child);
+    result.push_back(new_element);
+  }
+  return result;
+}
 
 template <typename T>
 std::vector<T> read_vector(TiXmlNode * node, const std::string &key)
