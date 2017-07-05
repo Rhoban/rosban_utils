@@ -96,6 +96,15 @@ std::vector<T> read_serializable_vector(TiXmlNode * node, const std::string &key
   return result;
 }
 
+template<typename T>
+void try_read_serializable_vector(TiXmlNode * node, const std::string & key,
+                                  std::vector<T> & result)
+{
+  if (node->FirstChild(key) != nullptr) {
+    result = read_serializable_vector<T>(node, key);
+  }
+}
+
 template <typename T>
 std::vector<T> read_vector(TiXmlNode * node, const std::string &key)
 {

@@ -158,6 +158,21 @@ public:
       return result;
     }
 
+  /// Try to read a vector with the given key at a specified node
+  /// throw exceptions if:
+  /// - node is null
+  /// - an exception is thrown while building one of the element
+  /// Do not throw exception if key does not exist
+  void tryReadVector(TiXmlNode * node, const std::string & key,
+                     std::vector<std::unique_ptr<T>> & res)
+    {
+      if(!node) throw XMLParsingError("Factory::readVector: Null node when trying to get a vector");
+      TiXmlNode* values = node->FirstChild(key);
+      if (values != nullptr) {
+        res = readVector(node, key);
+      }
+    }
+
   /// Return the number of bytes read
   int read(std::istream & in, std::unique_ptr<T> & ptr)
     {
