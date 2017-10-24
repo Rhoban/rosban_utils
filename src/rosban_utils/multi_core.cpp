@@ -36,6 +36,11 @@ void MultiCore::runParallelTask(Task t,
                                 int nb_tasks,
                                 int nb_threads)
 {
+  // Specific case for one thread, just use current thread
+  if (nb_threads == 1) {
+    t(0,nb_tasks);
+    return;
+  }
   MultiCore::Intervals intervals = buildIntervals(nb_tasks, nb_threads);
   std::vector<std::thread> threads;
   // Launch all threads
@@ -60,6 +65,11 @@ void MultiCore::runParallelStochasticTask(StochasticTask st,
     throw std::runtime_error("MultiCore::runParallelStochasticTask with no engines");
   }
   int nb_threads = engines->size();
+  // Specific case for one thread, just use current thread
+  if (nb_threads == 1) {
+    st(0,nb_tasks, &((*engines)[0]));
+    return;
+  }
   MultiCore::Intervals intervals = buildIntervals(nb_tasks, nb_threads);
   std::vector<std::thread> threads;
   // Launch all threads
