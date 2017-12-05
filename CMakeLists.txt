@@ -6,7 +6,7 @@ project(rosban_utils)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
     cmake_modules
-    Eigen
+    eigen
 )
 
 find_package(TinyXML REQUIRED)
@@ -107,7 +107,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 catkin_package(
   INCLUDE_DIRS include 
   LIBRARIES rosban_utils
-  CATKIN_DEPENDS Eigen
+  CATKIN_DEPENDS eigen
   DEPENDS TinyXML
 )
 
